@@ -1,14 +1,18 @@
 from django.shortcuts import render,redirect
 from .models import Student
-from .forms import StudentForm
 from rest_framework.renderers import JSONRenderer
 from .serializers import StudentSerializer
 from django.http import HttpResponse
 from django.contrib import messages
+from django.conf import settings
+from django.core.mail import send_mail
+
 
 
 def register(request):
+    # breakpoint()
     if request.method == 'POST':
+        # breakpoint()
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         email = request.POST.get('email_id')
@@ -37,11 +41,16 @@ def register(request):
             password=password, 
             confirm_password=confirm_password
         )
-        
-        messages.success(request, "Registration successful. You can now login.")
+        student.save()
+        subject ="Welcome To My User Register From"
+        email_message=f"Hello..{student.first_name} \n\nThank you for registering on our website. Please confirm your email address \n\nRegards,\nThe Django Team"
+        form_email=settings.EMAIL_HOST_USER
+        recipient_list=[student.email_id,]
+        send_mail(subject, email_message, form_email, recipient_list)
         return redirect('home')
     
     return render(request, 'register.html')
+
 
 
 def home(request):

@@ -5,3 +5,6 @@
 
 # SQLite database file
 db.sqlite3
+
+# .env file is added
+.env
