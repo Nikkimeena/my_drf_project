@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
+from django.contrib.auth import login,authenticate,logout
 
 
 
@@ -42,6 +43,7 @@ def register(request):
             confirm_password=confirm_password
         )
         student.save()
+        # breakpoint()
         subject ="Welcome To My User Register From"
         email_message=f"Hello..{student.first_name} \n\nThank you for registering on our website. Please confirm your email address \n\nRegards,\nThe Django Team"
         form_email=settings.EMAIL_HOST_USER
@@ -51,7 +53,26 @@ def register(request):
     
     return render(request, 'register.html')
 
-
+"""
+email and password get if check karna hai ki bhai email hai ki ni hai then check password if both asre is write then login and 
+"""
 
 def home(request):
     return render(request,'home.html')
+
+
+def user_login(request):
+    if request.method == 'POST':
+        email_id = request.POST.get('email_id')
+        password = request.POST.get('password')
+
+        user = authenticate(request, email_id=email_id, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, f'Welcome, {email_id}!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Invalid email_id or password. Please try again.')
+    
+    return render(request, 'index.html')
