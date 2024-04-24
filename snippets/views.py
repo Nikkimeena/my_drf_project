@@ -8,9 +8,14 @@ from snippets.models import Snippet
 from rest_framework.decorators import api_view
 # from snippets.serializers import SnippetSerializer
 from .serializers import SnippetSerializer
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 
 @csrf_exempt
 @api_view(['GET', 'POST'])
+
 def snippet_list(request):
     """
     List all code snippets or create a new snippet.
@@ -55,3 +60,7 @@ def snippet_detail(request,pk):
     elif request.method =='DELETE':
         snippet.delete()
         return HttpResponse(status=204)
+
+
+
+
