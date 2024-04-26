@@ -5,9 +5,13 @@ from rest_framework.response import Response
 from drf_app.models import User
 from drf_app.serializers import UserSerializer
 from rest_framework import status
+from rest_framework.views import APIView
+from django.http import Http404
 
 # Create your views here.
 
+
+"""Function Based view"""
 
 @api_view(['GET'])
 def user_list(request):
@@ -30,7 +34,7 @@ def hello_world(request):
         return Response({'msg':"This IS POST Request",'data':request.data})
     
 
-
+"""get user """
 
 @api_view(['GET'])
 def user_api(request,id=None):
@@ -44,6 +48,7 @@ def user_api(request,id=None):
         serializer=UserSerializer(users,many=True)
         return Response(serializer.data)
 
+""" Create the User"""
 
 @api_view(['POST'])
 def add_user(request):
@@ -56,7 +61,8 @@ def add_user(request):
             print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
+""" Update User """   
+
 @api_view(['PUT'])
 def update_user(request, id):
     try:
@@ -70,6 +76,7 @@ def update_user(request, id):
         return Response({'msg':'user Update Succesfully'},status=status.HTTP_204_NO_CONTENT)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+""" Delete the User"""
 
 @api_view(['DELETE'])
 def delete_user(request,id):
@@ -77,3 +84,124 @@ def delete_user(request,id):
         user=User.objects.get(id=id)
         user.delete()
         return Response({'msg':'user delete Succesfully'},status=status.HTTP_204_NO_CONTENT)
+    
+
+#########################################################################################################################################   
+
+"""Class Based View"""
+
+
+class UserList(APIView):
+
+    """
+    List all users or Create a new User
+    """
+    def get(self,request,format=None):
+        breakpoint()
+        users=User.objects.all()
+
+        serializer=UserSerializer(users,many=True)
+        return Response(serializer.data)
+    
+    def post(self,request,format=None):
+        serializer=UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+
+class UserDetail(APIView):
+    """
+    Retrieve ,Update or Delete A User Instance
+    """
+    def get_object(self,pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+        
+    def get(self,request,pk,format=None):
+        user=self.get_object(pk)
+        serializer=UserSerializer(user)
+        return Response(serializer.data)
+    
+    def put(self,request,pk,format=None):
+        user=self.get_object(pk)
+        serializer=UserSerializer(user,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+    def patch(self, request, pk, format=None):
+        user = self.get_object(pk)
+        serializer = UserSerializer(user,data=request.data, partial=True)  
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def delete(self,request,pk,format=None):
+        user=self.get_object(pk)
+        user.delete()
+        return Response({'msg':'user delete Succesfully'},status=status.HTTP_204_NO_CONTENT)
+
+
+
+#######################################################################################################################################
+    """ Mixin View Drf"""   
+from rest_framework import mixins
+from rest_framework import generics
+
+
+class AllUserList(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  generics.GenericAPIView):
+    queryset=User.objects.all()
+    # breakpoint()
+    serializer_class=UserSerializer
+
+    def get(self,request,*args,**kwargs):
+        return self.list(request,*args,**kwargs)
+    
+    def post(self,request,*args,**kwargs):
+        return self.create(request,*args,**kwargs)
+    
+
+class UserInfo(mixins.RetrieveModelMixin,
+               mixins.UpdateModelMixin,
+               mixins.DestroyModelMixin,
+               generics.GenericAPIView):
+    queryset=User.objects.all()
+    serializer_class=UserSerializer
+
+
+    def get(self,request,*args,**kwargs):
+        return self.retrieve(request,*args,**kwargs)
+    
+    def put(self,request,*args,**kwargs):
+        return self.update(request,*args,**kwargs)
+    
+    # def patch(self,request,*args,**kwargs):
+    #     return self.update(request,*args,**kwargs)
+    
+    def delete(self,request,*args,**kwargs):
+        return self.destroy(request,*args,**kwargs)
+    
+
+############################################################################################################################################
+"""Generic View Api"""
+
+from rest_framework import generics
+
+
+class List(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class Detail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
