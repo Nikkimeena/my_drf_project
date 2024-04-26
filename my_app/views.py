@@ -38,6 +38,7 @@ def generate_captcha(length=6):
 def register(request):
     captcha = generate_captcha()
     captcha_data = captcha_generate(captcha) 
+    # print(captcha_data)
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -87,27 +88,6 @@ def register(request):
         return redirect('home')
     return render(request, 'register.html',{'captcha_data':captcha_data})
 
-"""
-email and password get if check karna hai ki bhai email hai ki ni hai then check password if both asre is write then login and 
-"""
-
 def home(request):
     return render(request,'home.html')
 
-
-def user_login(request):
-    if request.method == 'POST':
-        email_id = request.POST.get('email_id')
-        password = request.POST.get('password')
-
-        # user = authenticate(request, email_id=email_id, password=password)
-        
-
-        if user is not None:
-            login(request, user)
-            messages.success(request, f'Welcome, {email_id}!')
-            return redirect('home')
-        else:
-            messages.error(request, 'Invalid email_id or password. Please try again.')
-    
-    return render(request, 'index.html')
