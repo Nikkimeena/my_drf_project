@@ -23,7 +23,8 @@ from rest_framework.routers import DefaultRouter
 
 router=DefaultRouter()
 
-router.register('bookapi',views.BookViewset,basename='book')
+# router.register('bookapi',views.BookViewset,basename='book')
+router.register('PersonViewset',views.PersonViewset,basename='PersonViewset')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +32,8 @@ urlpatterns = [
     path('sinppets/',include('snippets.urls')),
     path('drf_app/',include('drf_app.urls')),
     path('',include(router.urls)),
+    path('auth/',include('rest_framework.urls',namespace='rest_framework'))
+
 
 
 ]

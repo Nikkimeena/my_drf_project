@@ -32,5 +32,6 @@ urlpatterns = [
     path('BookRetrieveUpdate/<int:pk>/',views.BookRetrieveUpdate.as_view()),
     path('Book_delete/<int:pk>/',views.Book_delete.as_view()),
     path('Book_update_delete/<int:pk>/',views.Book_update_delete.as_view()),
+    
  
 ]

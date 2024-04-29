@@ -177,8 +177,20 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'your_email@gmail.com'
 EMAIL_HOST_PASSWORD = 'your_email_password'
 
+import rest_framework
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+"""Basic authentication in django
+
+global   """
+
+
+
+
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.BasicAuthentication',
-#     ]
+#         'rest_framework.authentication.BasicAuthentication'],
+#     'DEFAULT_PERMISSION_CLASSES': [ 'rest_framework.permissions.IsAuthenticated']
+    
 # }

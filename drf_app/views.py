@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from drf_app.models import User,Book
-from drf_app.serializers import UserSerializer,BookSerializer
+from drf_app.serializers import UserSerializer,BookSerializer,PersonSerializer
 from rest_framework import status
 from rest_framework.views import APIView
 from django.http import Http404
@@ -262,18 +262,20 @@ class Book_update_delete(RetrieveUpdateDestroyAPIView):
 
 ############################################################################################################################################3
 
+""" basic Authentication in django"""
 
 from rest_framework import viewsets
 from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser
 
 
 
 class BookViewset(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
+    permission_classes=[IsAdminUser]
 
 
 
@@ -281,4 +283,27 @@ class BookReadOnly(viewsets.ReadOnlyModelViewSet):
     queryset=Book.objects.all()
     serializer_class = BookSerializer
     authentication_classes=[BasicAuthentication]
-    permission_classes=[IsAuthenticated]
+    # permission_classes=[IsAuthenticated]
+    # permission_classes =[AllowAny]
+    permission_classes=[IsAdminUser]
+
+
+###########################################################################################################
+
+"""Session Authentoication in django"""
+
+
+from rest_framework import viewsets
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser
+from .models import Person
+
+
+class PersonViewset(viewsets.ModelViewSet):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
+    authentication_classes = [SessionAuthentication]
+    # permission_classes = [IsAuthenticated]
+    # permission_classes=[IsAdminUser]
+    permission_classes=[IsAdminUser]
+
