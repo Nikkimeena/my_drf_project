@@ -16,11 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from drf_app import views
+
+
+from rest_framework.routers import DefaultRouter
+
+router=DefaultRouter()
+
+router.register('bookapi',views.BookViewset,basename='book')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('my_app/',include('my_app.urls')),
     path('sinppets/',include('snippets.urls')),
-    path('drf_app/',include('drf_app.urls'))
+    path('drf_app/',include('drf_app.urls')),
+    path('',include(router.urls)),
+
 
 ]

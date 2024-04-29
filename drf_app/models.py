@@ -11,3 +11,7 @@ class User(models.Model):
         return self.name
         
    
+class Book(models.Model):
+    book_name=models.CharField(max_length=90)
+    author_name=models.CharField(max_length=90)
+    published_date=models.DateTimeField(auto_now=True)

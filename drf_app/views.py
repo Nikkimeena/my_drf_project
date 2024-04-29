@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from drf_app.models import User
-from drf_app.serializers import UserSerializer
+from drf_app.models import User,Book
+from drf_app.serializers import UserSerializer,BookSerializer
 from rest_framework import status
 from rest_framework.views import APIView
 from django.http import Http404
@@ -205,3 +205,80 @@ class List(generics.ListCreateAPIView):
 class Detail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+####################################################################################################################################
+    
+
+
+"""concrite Api View """
+
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView,ListCreateAPIView,RetrieveUpdateAPIView,RetrieveDestroyAPIView,RetrieveUpdateDestroyAPIView
+
+
+class BookList(ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+class BookCreate(CreateAPIView):
+    books=Book.objects.all()
+    serializer_class=BookSerializer
+
+
+class BookRetreive(RetrieveAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+class BookUpdate(UpdateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+class BookDelete(DestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class=BookSerializer
+
+
+class BookListCreate(ListCreateAPIView):
+    queryset=Book.objects.all()
+    serializer_class=BookSerializer
+
+
+class BookRetrieveUpdate(RetrieveUpdateAPIView):
+    queryset = Book.objects.all()
+    serializer_class=BookSerializer
+
+
+
+class Book_delete(RetrieveDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class=BookSerializer
+
+
+
+class Book_update_delete(RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class=BookSerializer
+
+
+############################################################################################################################################3
+
+
+from rest_framework import viewsets
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+
+
+class BookViewset(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+
+
+class BookReadOnly(viewsets.ReadOnlyModelViewSet):
+    queryset=Book.objects.all()
+    serializer_class = BookSerializer
+    authentication_classes=[BasicAuthentication]
+    permission_classes=[IsAuthenticated]

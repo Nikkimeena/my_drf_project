@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from drf_app.models import User
+from drf_app.models import User,Book
 
 
 """ 1.validation """
@@ -34,3 +34,8 @@ class UserSerializer(serializers.ModelSerializer):
 #     return nm
 
 
+
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields=['book_name','author_name','published_date']
