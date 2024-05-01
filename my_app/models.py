@@ -14,8 +14,11 @@ class Student(models.Model):
 
 class StudentLogin(models.Model):
     email_id = models.EmailField()
-    password = models.CharField(max_length=20)  
+    user_otp=models.CharField(max_length=6)
     created = models.DateTimeField(auto_now_add=True)
+    
+class CaptchaData(models.Model):
+    captcha_data = models.CharField(max_length=6)
 
     def __str__(self):
-        return f"{self.student}'s login"
+        return self.captcha_data

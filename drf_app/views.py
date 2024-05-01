@@ -295,8 +295,9 @@ class BookReadOnly(viewsets.ReadOnlyModelViewSet):
 
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser
+# from rest_framework.permissions import IsAuthenticated,AllowAny,IsAdminUser,IsAuthenticatedOrReadOnly,DjangoModelPermissions,DjangoModelPermissionsOrAnonReadOnly
 from .models import Person
+from .custompermission import Permission
 
 
 class PersonViewset(viewsets.ModelViewSet):
@@ -305,5 +306,14 @@ class PersonViewset(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication]
     # permission_classes = [IsAuthenticated]
     # permission_classes=[IsAdminUser]
-    permission_classes=[IsAdminUser]
+    # permission_classes=[IsAdminUser]
+    # permission_classes=[IsAuthenticatedOrReadOnly]
+    # permission_classes=[DjangoModelPermissions]
 
+    # permission_classes=[DjangoModelPermissionsOrAnonReadOnly]
+    permission_classes=[Permission]
+
+    
+
+
+   
